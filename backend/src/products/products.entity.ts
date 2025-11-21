@@ -11,6 +11,6 @@ export class Products {
   @Column({ nullable: true })
   description?: string;
 
-  @Column({ unique: true, nullable: false })
+  @Column({ nullable: false })
   price: number;
 }
