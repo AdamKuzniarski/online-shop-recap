@@ -1,9 +1,12 @@
-export default function Card({ name, description, price }) {
+import Link from "next/link";
+import { Product } from "../types/product";
+
+export default function Card({ id, name }: Product) {
   return (
     <div>
-      <p>{name} </p>
-      <p>{description}</p>
-      <p>{price},-</p>
+      <Link href={`/products/${id}`}>
+        <p>{name} </p>
+      </Link>
     </div>
   );
 }
