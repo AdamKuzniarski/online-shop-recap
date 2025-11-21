@@ -25,7 +25,7 @@ export default function Form({ onSubmit }: FormProps) {
       <label htmlFor="description">Description</label>
       <input type="text" required id="description" name="description" />
       <label htmlFor="description">Price</label>
-      <input type="text" required id="price" name="price" />
+      <input type="number" required id="price" name="price" />
       <button type="submit">Add</button>
     </form>
   );
