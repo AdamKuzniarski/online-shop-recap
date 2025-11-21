@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { Products } from './products/products.entity';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -11,8 +13,15 @@ import { ConfigModule } from '@nestjs/config';
       type: 'postgres',
       url: process.env.POSTGRES_URL,
       autoLoadEntities: true,
+      entities: [Products],
       synchronize: true, // Nur während Entwicklung!
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
     }),
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
