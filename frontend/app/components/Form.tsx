@@ -1,4 +1,4 @@
-type ProductsFormData = {
+export type ProductsFormData = {
   name: string;
   description: string;
   price: number;
