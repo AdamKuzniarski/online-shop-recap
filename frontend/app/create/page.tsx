@@ -13,10 +13,11 @@ export default function CreateProduct() {
     router.push("/");
   }
   return (
-    <>
-      <h2>Add Product</h2>
-      <Link href="/">← Home</Link>
+    <section className="space-y-4">
+      <header className="flex items-center justify-between"></header>
+      <h2 className="text-xl font-semibold tracking-tight text-slate-900">Add Product</h2>
+      <Link href="/" className="text-slate-500 text-sm hover:text-slate-700">← Home</Link>
       <Form onSubmit={addProduct} />
-    </>
+    </section>
   );
 }
