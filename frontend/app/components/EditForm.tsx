@@ -78,7 +78,6 @@ export default function EditForm({ onSubmit, initialData }: FormProps) {
         type="submit"
         className="w-full rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-600 transition"
       >
-        Add
         {initialData ? "Update" : "Add"}
       </button>
     </form>

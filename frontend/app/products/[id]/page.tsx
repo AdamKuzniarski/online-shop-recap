@@ -1,20 +1,16 @@
-import { products } from "@/db/db";
+import DeleteButton from "@/app/components/DeleteButton";
+import { Pencil } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export default async function DetailPage({ params }: Props) {
   const { id } = await params;
 
-  const currentIndex = products.findIndex((product) => product.id === id);
-
-  if (currentIndex === -1) {
-    return <p className="text-sm text-red-500">Product not found</p>;
-  }
-
-  const product = products[currentIndex];
+  const response = await fetch(`http://localhost:4000/products/${id}`);
+  const product = await response.json();
 
   return (
     <section className="space-y-4">
@@ -25,6 +21,17 @@ export default async function DetailPage({ params }: Props) {
         ← Home
       </Link>
       <article className="space-y-2 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+        <Link
+          href={`/products/${id}/edit`}
+          className=" top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"
+        >
+          <Pencil className="h-4 w-4" />
+        </Link>
+        <div className="mt-4 flex items-center justify-between">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 text-lg">
+            +
+          </span>
+        </div>
         <h2 className="text-xl font-semibold tracking-tight text-slate-950">
           {product.name}
         </h2>
@@ -32,6 +39,7 @@ export default async function DetailPage({ params }: Props) {
         <p className="text-ls font-semibold text-slate-900">
           {product.price},-
         </p>
+        <DeleteButton id={product.id} />
       </article>
     </section>
   );
