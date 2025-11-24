@@ -10,18 +10,21 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Products } from './products.entity';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   // GET /products
+  @Public()
   @Get()
   async findAll(): Promise<Products[]> {
     return this.productsService.findAll();
   }
 
   // GET /products/:id
+  @Public()
   @Get(':id')
   async findOne(
     @Param('id', ParseIntPipe) id: number,

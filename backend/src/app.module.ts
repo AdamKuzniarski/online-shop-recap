@@ -8,17 +8,20 @@ import { ProductsModule } from './products/products.module';
 import { CustomerModule } from './customer/customer.module';
 import { OrderModule } from './order/order.module';
 import { AuthModule } from './auth/auth.module';
-import { CartModule } from './cart/cart.module';
-import { WishlistModule } from './wishlist/wishlist.module';
+import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.POSTGRES_URL,
       autoLoadEntities: true,
-      entities: [Products],
+      entities: [Products, User],
       synchronize: true, // Nur während Entwicklung!
       extra: {
         ssl: {
@@ -29,11 +32,15 @@ import { WishlistModule } from './wishlist/wishlist.module';
     ProductsModule,
     CustomerModule,
     OrderModule,
-    AuthModule,
-    CartModule,
-    WishlistModule,
+    UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}
