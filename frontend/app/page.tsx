@@ -1,8 +1,11 @@
-import { products } from "@/db/db";
 import Card from "./components/Card";
 import Link from "next/link";
+import { Product } from "./types/product";
 
-export default function Home() {
+export default async function Home() {
+  const response = await fetch(`http://localhost:4000/products`);
+  const products = await response.json();
+
   return (
     <section className="space-y-8">
       <header className="flex items-center justify-between">
@@ -22,7 +25,7 @@ export default function Home() {
         </div>
       </header>
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-slate-600">
-        {products.map((product) => {
+        {products.map((product: Product) => {
           return (
             <li key={product.id}>
               <Card
