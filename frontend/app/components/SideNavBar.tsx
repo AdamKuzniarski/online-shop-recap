@@ -3,21 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NavItemConfig } from "../types/navItemConfig";
-import {
-  Home,
-  ShoppingBag,
-  ListTodo,
-  Headphones,
-  Settings,
-  User,
-} from "lucide-react";
+import { Home, Headphones, Settings, User } from "lucide-react";
 
 const mainNav: NavItemConfig[] = [
   { href: "/user", label: "User", icon: User },
   { href: "/", label: "Home", icon: Home },
-
-  { href: "/orders", label: "Orders", icon: ShoppingBag },
-  { href: "/list", label: "List", icon: ListTodo },
 ];
 
 const secondaryNav: NavItemConfig[] = [
