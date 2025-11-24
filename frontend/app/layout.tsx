@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SidebarNav, MobileNav } from "./components/SideNavBar";
-import SWRProvider from "./components/SwrProvider";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SWRProvider>
+      
           <div className="min-h-screen bg-slate-100 flex justify-center">
             <main className="w-full max-w-6xl p-4 md:p-8">
               <div className="flex gap-4 md:gap-6">
@@ -43,7 +43,7 @@ export default function RootLayout({
               <MobileNav />
             </main>
           </div>
-        </SWRProvider>
+        
       </body>
     </html>
   );

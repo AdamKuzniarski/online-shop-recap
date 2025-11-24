@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Form, { ProductsFormData } from "../components/EditForm";
+import Form, { ProductsFormData } from "../products/EditForm";
 import { useRouter } from "next/navigation";
 
 export default function CreateProduct() {

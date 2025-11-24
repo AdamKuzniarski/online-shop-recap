@@ -1,4 +1,4 @@
-import DeleteButton from "@/app/components/DeleteButton";
+import DeleteButton from "@/app/products/DeleteButton";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
 
