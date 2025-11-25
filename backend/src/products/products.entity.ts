@@ -1,16 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity() // This decorator tells TypeORM that this class is a database entity (table)
-export class Products {
-  @PrimaryGeneratedColumn() // Marks 'id' as the primary key, and it auto-increments
+@Entity()
+export class Product {
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100, nullable: false })
+  @Column()
   name: string;
 
-  @Column({ nullable: true })
-  description?: string;
+  @Column()
+  description: string;
 
-  @Column({ nullable: false })
+  @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 }

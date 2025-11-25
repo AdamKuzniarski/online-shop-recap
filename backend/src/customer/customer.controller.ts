@@ -2,60 +2,41 @@ import {
   Controller,
   Get,
   Post,
+  Body,
+  Param,
   Patch,
   Delete,
-  Param,
-  Body,
-  UseGuards,
 } from '@nestjs/common';
 import { CustomerService } from './customer.service';
-import { Customer } from './customer.entity';
-import { Public } from '../common/decorators/public.decorator';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Controller('customers')
-export class CustomerController {
-  constructor(private readonly customerService: CustomerService) {}
-  @Public()
-  @UseGuards(JwtAuthGuard)
-  @Post()
-  async create(@Body() data: Partial<Customer>): Promise<Customer> {
-    return this.customerService.create(data);
-  }
-  @Public()
-  @UseGuards(JwtAuthGuard)
+export class CustomersController {
+  constructor(private readonly customersService: CustomerService) {}
+
   @Get()
-  async findAll(): Promise<Customer[]> {
-    return this.customerService.findAll();
+  findAll() {
+    return this.customersService.findAll();
   }
-  @Public()
-  @UseGuards(JwtAuthGuard)
+
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Customer> {
-    return this.customerService.findOne(id);
+  findOne(@Param('id') id: string) {
+    return this.customersService.findOne(+id);
   }
-  @Public()
-  @UseGuards(JwtAuthGuard)
+
+  @Post()
+  create(@Body() body: CreateCustomerDto) {
+    return this.customersService.create(body);
+  }
+
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() data: Partial<Customer>,
-  ): Promise<Customer> {
-    return this.customerService.update(id, data);
+  update(@Param('id') id: string, @Body() body: UpdateCustomerDto) {
+    return this.customersService.update(+id, body);
   }
-  @Public()
-  @UseGuards(JwtAuthGuard)
+
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<void> {
-    return this.customerService.remove(id);
-  }
-  @Public()
-  @UseGuards(JwtAuthGuard)
-  @Post(':id/orders/:orderId')
-  async addOrder(
-    @Param('id') id: string,
-    @Param('orderId') orderId: string,
-  ): Promise<Customer> {
-    return this.customerService.addOrder(id, orderId);
+  remove(@Param('id') id: string) {
+    return this.customersService.remove(+id);
   }
 }

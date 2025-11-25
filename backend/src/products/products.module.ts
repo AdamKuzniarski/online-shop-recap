@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductsService } from './products.service';
-import { Products } from './products.entity';
 import { ProductsController } from './products.controller';
+import { ProductsService } from './products.service';
+import { Product } from './products.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Products])], // Makes the Products Repository available
+  imports: [TypeOrmModule.forFeature([Product])],
+  controllers: [ProductsController],
   providers: [ProductsService],
-  exports: [ProductsService],
-  controllers: [ProductsController], // Export if other modules (in this case OrderModule) need to use ProductsService
+  exports: [ProductsService], // wichtig für OrdersModule
 })
 export class ProductsModule {}

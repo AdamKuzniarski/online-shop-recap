@@ -1,38 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Products } from './products.entity';
+import { Product } from './products.entity';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    // Inject TypeORM's Repository for the products entity
-    @InjectRepository(Products)
-    private productsRepository: Repository<Products>,
+    @InjectRepository(Product)
+    private readonly productRepo: Repository<Product>,
   ) {}
 
-  async findAll(): Promise<Products[]> {
-    return this.productsRepository.find();
+  findAll() {
+    return this.productRepo.find();
   }
 
-  async findOne(id: number): Promise<Products | null> {
-    return this.productsRepository.findOne({ where: { id } });
+  async findOne(id: number) {
+    const product = await this.productRepo.findOne({ where: { id } });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product;
   }
 
-  async create(products: Partial<Products>): Promise<Products> {
-    const newproducts = this.productsRepository.create(products); // Creates a new entity instance (not yet saved to DB)
-    return this.productsRepository.save(newproducts); // Saves the instance to the database
+  create(data: CreateProductDto) {
+    const product = this.productRepo.create(data);
+    return this.productRepo.save(product);
   }
 
-  async update(
-    id: number,
-    products: Partial<Products>,
-  ): Promise<Products | null> {
-    await this.productsRepository.update(id, products); // Updates by ID directly
-    return this.productsRepository.findOne({ where: { id } }); // Returns the updated products
+  async update(id: number, data: UpdateProductDto) {
+    const product = await this.findOne(id);
+
+    Object.assign(product, data);
+    return this.productRepo.save(product);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.productsRepository.delete(id); // Deletes by ID
+  async remove(id: number) {
+    const product = await this.findOne(id);
+    return this.productRepo.remove(product);
   }
 }

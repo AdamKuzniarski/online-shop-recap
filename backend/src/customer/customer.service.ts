@@ -2,43 +2,47 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Customer } from './customer.entity';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Injectable()
 export class CustomerService {
   constructor(
     @InjectRepository(Customer)
-    private readonly customerRepository: Repository<Customer>,
+    private readonly customerRepo: Repository<Customer>,
   ) {}
 
-  async create(customerData: Partial<Customer>): Promise<Customer> {
-    const customer = this.customerRepository.create(customerData);
-    return await this.customerRepository.save(customer);
+  findAll() {
+    return this.customerRepo.find();
   }
 
-  async findAll(): Promise<Customer[]> {
-    return this.customerRepository.find();
-  }
+  async findOne(id: number) {
+    const customer = await this.customerRepo.findOne({
+      where: { id },
+      relations: ['orders'],
+    });
 
-  async findOne(id: string): Promise<Customer> {
-    const customer = await this.customerRepository.findOne({ where: { id } });
-    if (!customer) throw new NotFoundException('Customer not found');
+    if (!customer) {
+      throw new NotFoundException('Customer not found');
+    }
+
     return customer;
   }
 
-  async update(id: string, data: Partial<Customer>): Promise<Customer> {
-    await this.customerRepository.update(id, data);
-    return this.findOne(id);
+  create(data: CreateCustomerDto) {
+    const customer = this.customerRepo.create(data);
+    return this.customerRepo.save(customer);
   }
 
-  async remove(id: string): Promise<void> {
-    const result = await this.customerRepository.delete(id);
-    if (result.affected === 0)
-      throw new NotFoundException('Customer not found');
-  }
-
-  async addOrder(id: string, orderId: string): Promise<Customer> {
+  async update(id: number, data: UpdateCustomerDto) {
     const customer = await this.findOne(id);
-    customer.orderIds.push(orderId);
-    return await this.customerRepository.save(customer);
+
+    Object.assign(customer, data);
+    return this.customerRepo.save(customer);
+  }
+
+  async remove(id: number) {
+    const customer = await this.findOne(id);
+    return this.customerRepo.remove(customer);
   }
 }
