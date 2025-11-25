@@ -1,41 +1,39 @@
-import { users  } from "@/db/db-user";
-import { User } from "../types/user";
-import CardUser from "../components/CardUser";
+
 import Link from "next/link";
+import { Customer } from "../types/customer";
+import CardCustomer from "../components/CardCustomer";
 
-
-export default function UserPage() {
-  
-
-  
+export default async function CustomerPage() {
+  const response = await fetch(`http://localhost:4000/api/customers`);
+  const customers = await response.json();
 
   return (
     <section className="space-y-8">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-slate-800">
-            User Dashboard
+            Customer Overview
           </h1>
           <p className="text-sm text-slate-500 mt-2 mb-6">
-            Manage users and see details.
+            Manage customers and see details.
           </p>
           <Link
-            href="/create-user"
+            href="/create-customer"
             className="inline-flex items-center rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-white shadow hover:bg-emerald-600 transition"
           >
-            + User
+            + Customer
           </Link>
         </div>
       </header>
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-slate-600">
-        {users.map((user: User) => {
+        {customers.map((customer: Customer) => {
           return (
-            <li key={user.id}>
-              <CardUser
-                id={user.id}
-                name={user.name}
-                email={user.email}
-                orderIds={user.orderIds}
+            <li key={customer.id}>
+              <CardCustomer
+                id={customer.id}
+                name={customer.name}
+                email={customer.email}
+                orderIds={customer.orderIds}
               />
             </li>
           );

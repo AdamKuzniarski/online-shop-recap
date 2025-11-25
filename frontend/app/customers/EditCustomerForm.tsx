@@ -1,21 +1,21 @@
-export type UserFormData = {
+export type CustomerFormData = {
   name: string;
   email: string;
   orderIds: string[];
 };
 
 type FormProps = {
-  onSubmit: (data: UserFormData) => void;
+  onSubmit: (data: CustomerFormData) => void;
 };
 
-export default function EditUserForm({ onSubmit, initialData }: FormProps) {
+export default function EditCustomerForm({ onSubmit, initialData }: FormProps) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
     const raw = Object.fromEntries(formData);
 
-    const data = raw as unknown as UserFormData;
+    const data = raw as unknown as CustomerFormData;
     onSubmit(data);
   }
 

@@ -9,13 +9,13 @@ type Props = {
 export default async function EditProduct({ params }: Props) {
   const { id } = await params;
 
-  const response = await fetch(`http://localhost:4000/products/${id}`);
+  const response = await fetch(`http://localhost:4000/api/products/${id}`);
   const product = await response.json();
 
   async function editProduct(data: ProductsFormData) {
     "use server";
 
-    await fetch(`http://localhost:4000/products/${id}`, {
+    await fetch(`http://localhost:4000/api/products/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

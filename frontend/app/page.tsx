@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Product } from "./types/product";
 
 export default async function Home() {
-  const response = await fetch(`http://localhost:4000/products`);
+  const response = await fetch(`http://localhost:4000/api/products`);
   const products = await response.json();
 
   return (
