@@ -1,14 +1,14 @@
-export type UserFormData = {
+export type CustomerFormData = {
   name: string;
   email: string;
   orderIds: string[];
 };
 
 type FormProps = {
-  onSubmit: (data: UserFormData) => void;
+  onSubmit: (data: CustomerFormData) => void;
 };
 
-export default function AddUserForm({ onSubmit }: FormProps) {
+export default function AddCustomerForm({ onSubmit }: FormProps) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -22,7 +22,7 @@ export default function AddUserForm({ onSubmit }: FormProps) {
       .map((id) => id.trim())
       .filter(Boolean); // leere Zeilen entfernen
 
-    const data: UserFormData = {
+    const data: CustomerFormData = {
       name: raw.name as string,
       email: raw.email as string,
       orderIds,

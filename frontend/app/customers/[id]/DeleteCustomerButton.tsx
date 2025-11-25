@@ -1,6 +1,5 @@
 "use client";
 
-import { users } from "@/db/db-user";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -8,16 +7,15 @@ type Props = {
   id: string;
 };
 
-export default function DeleteUserButton({ id }: Props) {
+export default function DeleteCustomerButton({ id }: Props) {
   const router = useRouter();
 
   async function onDelete() {
-    const index = users.findIndex((user) => user.id === id);
-    if (index !== -1) {
-      users.splice(index, 1);
-    }
-    console.log(users.length);
-    router.push("/users");
+    await fetch(`http://localhost:4000/api/customers/${id}`, {
+      method: "DELETE",
+    });
+    
+    router.push("/customers");
   }
 
   return (

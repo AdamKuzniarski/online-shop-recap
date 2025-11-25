@@ -7,7 +7,7 @@ import { Home, Headphones, Settings, User } from "lucide-react";
 
 const mainNav: NavItemConfig[] = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/users", label: "Users", icon: User },
+  { href: "/customers", label: "Customers", icon: User },
 ];
 
 const secondaryNav: NavItemConfig[] = [
