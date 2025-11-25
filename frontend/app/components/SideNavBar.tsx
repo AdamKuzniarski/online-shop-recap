@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NavItemConfig } from "../types/navItemConfig";
-import { Home, Headphones, Settings, User } from "lucide-react";
+import { useState } from "react";
+import { Home, Headphones, Settings, User, KeyRound } from "lucide-react";
 
-const mainNav: NavItemConfig[] = [
+const mainNavBase: NavItemConfig[] = [
   { href: "/", label: "Home", icon: Home },
   { href: "/customers", label: "Customers", icon: User },
 ];
@@ -15,14 +16,29 @@ const secondaryNav: NavItemConfig[] = [
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
-function DesktopNavItem({ href, icon: Icon, label }: NavItemConfig) {
+// Funktion zum Prüfen, ob Token gültig ist
+const getInitialLoginState = (): boolean => {
+  const stored = localStorage.getItem("token");
+  if (!stored) return false;
+  try {
+    const payload = JSON.parse(atob(stored.split(".")[1]));
+    if (payload.exp * 1000 > Date.now()) return true;
+    localStorage.removeItem("token"); // abgelaufen
+    return false;
+  } catch {
+    localStorage.removeItem("token");
+    return false;
+  }
+};
+
+function DesktopNavItem({ href, icon: Icon, label, onClick }: NavItemConfig & { onClick?: () => void }) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
-  console.log("pathname", pathname, "href", href, "isActive", isActive);
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={[
         "flex h-11 w-11 items-center justify-center rounded-2xl transition",
         "hover:bg-emerald-50 hover:text-emerald-600",
@@ -37,12 +53,12 @@ function DesktopNavItem({ href, icon: Icon, label }: NavItemConfig) {
   );
 }
 
-function MobileNavItem({ href, icon: Icon, label }: NavItemConfig) {
+function MobileNavItem({ href, icon: Icon, label, onClick }: NavItemConfig & { onClick?: () => void }) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
   return (
-    <Link href={href} className="flex flex-col items-center gap-1 text-xs">
+    <Link href={href} onClick={onClick} className="flex flex-col items-center gap-1 text-xs">
       <Icon
         className={[
           "h-5 w-5",
@@ -57,11 +73,25 @@ function MobileNavItem({ href, icon: Icon, label }: NavItemConfig) {
 }
 
 export function SidebarNav() {
+  const [isLoggedIn] = useState(getInitialLoginState);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  };
+
+  const mainNav = [
+    ...mainNavBase,
+    isLoggedIn
+      ? { href: "#", label: "Logout", icon: KeyRound, onClick: handleLogout }
+      : { href: "/login", label: "Login", icon: KeyRound },
+  ];
+
   return (
     <nav className="flex h-full flex-col justify-between rounded-3xl bg-white p-3 shadow-sm ring-1 ring-slate-100">
       <div className="space-y-3">
         <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500 text-white text-xs font-semibold">
-          AK {/* //hier wird users Initial */}
+          AK {/* hier kann User Initial kommen */}
         </div>
 
         <div className="flex flex-col gap-2">
@@ -81,6 +111,20 @@ export function SidebarNav() {
 }
 
 export function MobileNav() {
+  const [isLoggedIn] = useState(getInitialLoginState);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  };
+
+  const mainNav = [
+    ...mainNavBase,
+    isLoggedIn
+      ? { href: "#", label: "Logout", icon: KeyRound, onClick: handleLogout }
+      : { href: "/login", label: "Login", icon: KeyRound },
+  ];
+
   return (
     <nav className="fixed bottom-4 inset-x-4 z-50 flex items-center justify-around rounded-2xl bg-white px-4 py-2 shadow-lg ring-1 ring-slate-200 md:hidden">
       {mainNav.map((item) => (
