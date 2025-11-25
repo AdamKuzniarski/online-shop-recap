@@ -18,6 +18,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (isPublic) return true;
 
     // super.canActivate kann boolean | Promise<boolean> zurückgeben
-    return await super.canActivate(context) as boolean;
+    return (await super.canActivate(context)) as boolean;
   }
 }
