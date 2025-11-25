@@ -1,6 +1,4 @@
-
-
-import EditForm, { ProductsFormData } from "@/app/components/EditForm";
+import EditForm, { ProductsFormData } from "@/app/products/EditForm";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 

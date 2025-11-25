@@ -11,7 +11,7 @@ type FormProps = {
   initialData?: ProductsFormData;
 };
 
-export default function EditForm({ onSubmit, initialData }: FormProps) {
+export default function EditUserForm({ onSubmit, initialData }: FormProps) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
