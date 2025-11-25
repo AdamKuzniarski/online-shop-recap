@@ -10,8 +10,8 @@ type Props = {
 export default function DeleteCustomerButton({ id }: Props) {
   const router = useRouter();
 
-  async function onDelete() {
-    await fetch(`http://localhost:4000/api/customers/${id}`, {
+   async function onDelete() {
+    await fetch(`http://localhost:4000/customers/${id}`, {
       method: "DELETE",
     });
     

@@ -1,10 +1,16 @@
+"use client";
+
 import Card from "./products/Card";
 import Link from "next/link";
 import { Product } from "./types/product";
+import useSWR from "swr";
 
-export default async function Home() {
-  const response = await fetch(`http://localhost:4000/api/products`);
-  const products = await response.json();
+export default function Home() {
+  const { data: products, isLoading } = useSWR(
+    `http://localhost:4000/api/products`
+  );
+
+  if (!products || isLoading) return <div>isLoading</div>;
 
   return (
     <section className="space-y-8">
