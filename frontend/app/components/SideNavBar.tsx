@@ -6,8 +6,8 @@ import type { NavItemConfig } from "../types/navItemConfig";
 import { Home, Headphones, Settings, User } from "lucide-react";
 
 const mainNav: NavItemConfig[] = [
-  { href: "/users", label: "Users", icon: User },
   { href: "/", label: "Home", icon: Home },
+  { href: "/users", label: "Users", icon: User },
 ];
 
 const secondaryNav: NavItemConfig[] = [
