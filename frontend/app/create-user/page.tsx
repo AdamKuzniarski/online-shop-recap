@@ -3,7 +3,7 @@
 import { users } from "@/db/db-user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import AddUserForm from "../users/AddUserForm";
+import AddUserForm from "../users/EditUserForm";
 
 export default function CreateUser() {
   const router = useRouter();

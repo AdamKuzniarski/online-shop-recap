@@ -1,23 +1,21 @@
-"use client";
-
-export type ProductsFormData = {
+export type UserFormData = {
   name: string;
-  description: string;
-  price: number;
+  email: string;
+  orderIds: string[];
 };
 
 type FormProps = {
-  onSubmit: (data: ProductsFormData) => void;
-  initialData?: ProductsFormData;
+  onSubmit: (data: UserFormData) => void;
 };
 
 export default function EditUserForm({ onSubmit, initialData }: FormProps) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
     const raw = Object.fromEntries(formData);
 
-    const data = raw as unknown as ProductsFormData;
+    const data = raw as unknown as UserFormData;
     onSubmit(data);
   }
 
@@ -26,6 +24,7 @@ export default function EditUserForm({ onSubmit, initialData }: FormProps) {
       onSubmit={handleSubmit}
       className="mt-6 space-y-4 bg-white p-6 shadow-sm ring-1 ring-slate-100"
     >
+      {/* Name */}
       <div className="space-y-1">
         <label
           htmlFor="name"
@@ -35,45 +34,50 @@ export default function EditUserForm({ onSubmit, initialData }: FormProps) {
         </label>
         <input
           type="text"
-          defaultValue={initialData?.name}
           required
+          defaultValue={initialData?.name}
           id="name"
           name="name"
-          className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+          className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm"
         />
       </div>
+
+      {/* Email */}
       <div className="space-y-1">
         <label
-          htmlFor="description"
-          className="block text-sm font-medium  text-slate-700"
-        >
-          Description
-        </label>
-        <input
-          type="text"
-          required
-          defaultValue={initialData?.description}
-          id="description"
-          name="description"
-          className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-        />
-      </div>
-      <div className="space-y-1">
-        <label
-          htmlFor="price"
+          htmlFor="email"
           className="block text-sm font-medium text-slate-700"
         >
-          Price
+          Email
         </label>
         <input
-          type="number"
-          defaultValue={initialData?.price}
+          type="email"
           required
-          id="price"
-          name="price"
-          className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+          defaultValue={initialData?.email}
+          id="email"
+          name="email"
+          className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm"
         />
       </div>
+
+      {/* Order IDs */}
+      <div className="space-y-1">
+        <label
+          htmlFor="orderIds"
+          className="block text-sm font-medium text-slate-700"
+        >
+          Order IDs (eine pro Zeile)
+        </label>
+        <textarea
+          id="orderIds"
+          name="orderIds"
+          defaultValue={initialData?.orderIds}
+          rows={4}
+          placeholder="z. B. 123-abc-334&#10;987-xyz-554"
+          className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm"
+        ></textarea>
+      </div>
+
       <button
         type="submit"
         className="w-full rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-600 transition"

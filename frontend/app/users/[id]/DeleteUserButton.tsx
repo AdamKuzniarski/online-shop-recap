@@ -16,6 +16,7 @@ export default function DeleteUserButton({ id }: Props) {
     if (index !== -1) {
       users.splice(index, 1);
     }
+    console.log(users.length);
     router.push("/users");
   }
 
