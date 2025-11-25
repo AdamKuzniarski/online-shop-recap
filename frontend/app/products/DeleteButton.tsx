@@ -11,7 +11,7 @@ export default function DeleteButton({ id }: Props) {
   const router = useRouter();
 
   async function onDelete() {
-    await fetch(`http://localhost:4000/api/products/${id}`, {
+    await fetch(`http://localhost:4000/products/${id}`, {
       method: "DELETE",
     });
     router.push("/");

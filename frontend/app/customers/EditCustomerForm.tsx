@@ -6,6 +6,7 @@ export type CustomerFormData = {
 
 type FormProps = {
   onSubmit: (data: CustomerFormData) => void;
+  initialData: CustomerFormData;
 };
 
 export default function EditCustomerForm({ onSubmit, initialData }: FormProps) {
