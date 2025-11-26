@@ -1,5 +1,6 @@
 import Link from "next/link";
 import DeleteUserButton from "./DeleteCustomerButton";
+import { Pencil } from "lucide-react";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -24,22 +25,16 @@ export default async function DetailCustomerPage({ params }: Props) {
         ← Customer Overview
       </Link>
       <article className="space-y-2 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-        {/* <Link
-          href={`/customer/${id}/edit`}
+        <Link
+          href={`/customers/${id}/edit`}
           className=" top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"
         >
           <Pencil className="h-4 w-4" />
-        </Link> */}
-
+        </Link>{" "}
         <h2 className="text-xl font-semibold tracking-tight text-slate-950">
           {customer.name}
         </h2>
         <p className="text-sm text-slate-600">{customer.email}</p>
-        <ul className="text-sm font-semibold text-slate-900">
-          {customer.orderIds.map((order: string, index: number) => (
-            <li key={index}> {order}</li>
-          ))}
-        </ul>
         <DeleteUserButton id={customer.id} />
       </article>
     </section>

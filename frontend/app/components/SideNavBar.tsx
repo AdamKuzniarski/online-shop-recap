@@ -1,9 +1,9 @@
-"use client";
+
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NavItemConfig } from "../types/navItemConfig";
-import { useState } from "react";
+import {  useState } from "react";
 import { Home, Headphones, Settings, User, KeyRound } from "lucide-react";
 
 const mainNavBase: NavItemConfig[] = [
@@ -18,7 +18,8 @@ const secondaryNav: NavItemConfig[] = [
 
 // Funktion zum Prüfen, ob Token gültig ist
 const getInitialLoginState = (): boolean => {
-  const stored = localStorage.getItem("token");
+  return false}
+  /* const stored = localStorage.getItem("token");
   if (!stored) return false;
   try {
     const payload = JSON.parse(atob(stored.split(".")[1]));
@@ -28,10 +29,15 @@ const getInitialLoginState = (): boolean => {
   } catch {
     localStorage.removeItem("token");
     return false;
-  }
-};
+  } */
 
-function DesktopNavItem({ href, icon: Icon, label, onClick }: NavItemConfig & { onClick?: () => void }) {
+
+function DesktopNavItem({
+  href,
+  icon: Icon,
+  label,
+  onClick,
+}: NavItemConfig & { onClick?: () => void }) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
@@ -53,12 +59,21 @@ function DesktopNavItem({ href, icon: Icon, label, onClick }: NavItemConfig & { 
   );
 }
 
-function MobileNavItem({ href, icon: Icon, label, onClick }: NavItemConfig & { onClick?: () => void }) {
+function MobileNavItem({
+  href,
+  icon: Icon,
+  label,
+  onClick,
+}: NavItemConfig & { onClick?: () => void }) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
   return (
-    <Link href={href} onClick={onClick} className="flex flex-col items-center gap-1 text-xs">
+    <Link
+      href={href}
+      onClick={onClick}
+      className="flex flex-col items-center gap-1 text-xs"
+    >
       <Icon
         className={[
           "h-5 w-5",
@@ -74,6 +89,7 @@ function MobileNavItem({ href, icon: Icon, label, onClick }: NavItemConfig & { o
 
 export function SidebarNav() {
   const [isLoggedIn] = useState(getInitialLoginState);
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -111,7 +127,8 @@ export function SidebarNav() {
 }
 
 export function MobileNav() {
-  const [isLoggedIn] = useState(getInitialLoginState);
+  const [isLoggedIn] = useState(false);
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");

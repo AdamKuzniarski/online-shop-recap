@@ -1,11 +1,19 @@
+"use client";
 
 import Link from "next/link";
 import { Customer } from "../types/customer";
 import CardCustomer from "../components/CardCustomer";
+import useSWR from "swr";
 
-export default async function CustomerPage() {
-  const response = await fetch(`http://localhost:4000/api/customers`);
-  const customers = await response.json();
+export default function CustomerPage() {
+  const {
+    data: customers,
+    isLoading,
+    error,
+  } = useSWR(`http://localhost:4000/api/customers`);
+
+  if (!customers || isLoading || error) return <div>isLoading</div>;
+  console.log(customers);
 
   return (
     <section className="space-y-8">
@@ -33,7 +41,6 @@ export default async function CustomerPage() {
                 id={customer.id}
                 name={customer.name}
                 email={customer.email}
-                orderIds={customer.orderIds}
               />
             </li>
           );
