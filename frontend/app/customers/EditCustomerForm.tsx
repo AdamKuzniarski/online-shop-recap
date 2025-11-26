@@ -1,7 +1,7 @@
 export type CustomerFormData = {
   name: string;
   email: string;
-  orderIds: string[];
+  
 };
 
 type FormProps = {
@@ -61,23 +61,7 @@ export default function EditCustomerForm({ onSubmit, initialData }: FormProps) {
         />
       </div>
 
-      {/* Order IDs */}
-      <div className="space-y-1">
-        <label
-          htmlFor="orderIds"
-          className="block text-sm font-medium text-slate-700"
-        >
-          Order IDs (eine pro Zeile)
-        </label>
-        <textarea
-          id="orderIds"
-          name="orderIds"
-          defaultValue={initialData?.orderIds}
-          rows={4}
-          placeholder="z. B. 123-abc-334&#10;987-xyz-554"
-          className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm"
-        ></textarea>
-      </div>
+    
 
       <button
         type="submit"

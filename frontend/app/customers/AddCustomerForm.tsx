@@ -1,7 +1,6 @@
 export type CustomerFormData = {
   name: string;
   email: string;
-  orderIds: string[];
 };
 
 type FormProps = {
@@ -14,18 +13,10 @@ export default function AddCustomerForm({ onSubmit }: FormProps) {
 
     const formData = new FormData(event.currentTarget);
     const raw = Object.fromEntries(formData);
-
-    const orderIdsString = raw.orderIds as string;
-
-    const orderIds = orderIdsString
-      .split("\n")
-      .map((id) => id.trim())
-      .filter(Boolean); // leere Zeilen entfernen
-
+    
     const data: CustomerFormData = {
       name: raw.name as string,
       email: raw.email as string,
-      orderIds,
     };
 
     onSubmit(data);
@@ -68,23 +59,6 @@ export default function AddCustomerForm({ onSubmit }: FormProps) {
           name="email"
           className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm"
         />
-      </div>
-
-      {/* Order IDs */}
-      <div className="space-y-1">
-        <label
-          htmlFor="orderIds"
-          className="block text-sm font-medium text-slate-700"
-        >
-          Order IDs (eine pro Zeile)
-        </label>
-        <textarea
-          id="orderIds"
-          name="orderIds"
-          rows={4}
-          placeholder="z. B. 123-abc-334&#10;987-xyz-554"
-          className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm"
-        ></textarea>
       </div>
 
       <button
