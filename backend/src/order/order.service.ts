@@ -20,61 +20,88 @@ export class OrdersService {
     private readonly productRepo: Repository<Product>,
   ) {}
 
-  findAll() {
-    return this.orderRepo.find({
-      relations: ['products', 'customer'],
-    });
+  // =====================================================
+  // ========== GET ALL ORDERS WITH TOTAL PRICE ==========
+  // =====================================================
+  async findAll() {
+    return this.orderRepo
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.products', 'product')
+      .leftJoinAndSelect('order.customer', 'customer')
+      .addSelect('SUM(product.price)', 'totalPrice')
+      .groupBy('order.id')
+      .addGroupBy('customer.id')
+      .addGroupBy('product.id')
+      .getRawAndEntities()
+      .then(({ entities, raw }) =>
+        entities.map((entity, i) => ({
+          ...entity,
+          totalPrice: Number(raw[i].totalPrice),
+        })),
+      );
   }
 
+  // =====================================================
+  // ========== GET ONE ORDER WITH TOTAL PRICE ===========
+  // =====================================================
   async findOne(id: number) {
-    const order = await this.orderRepo.findOne({
-      where: { id },
-      relations: ['products', 'customer'],
-    });
+    const result = await this.orderRepo
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.products', 'product')
+      .leftJoinAndSelect('order.customer', 'customer')
+      .addSelect('SUM(product.price)', 'totalPrice')
+      .where('order.id = :id', { id })
+      .groupBy('order.id')
+      .addGroupBy('customer.id')
+      .addGroupBy('product.id')
+      .getRawAndEntities();
 
-    if (!order) {
+    if (!result.entities.length) {
       throw new NotFoundException('Order not found');
     }
 
-    return order;
+    return {
+      ...result.entities[0],
+      totalPrice: Number(result.raw[0].totalPrice),
+    };
   }
 
-  // ------------------------------------------
-  // CREATE ORDER (mit automatischer Preisberechnung)
-  // ------------------------------------------
+  // =====================================================
+  // ===================== CREATE ========================
+  // =====================================================
   async create(data: CreateOrderDto) {
     const { customerId, productIds } = data;
 
     const customer = await this.customerRepo.findOne({
       where: { id: customerId },
     });
-
     if (!customer) throw new NotFoundException('Customer not found');
 
     const products = await this.productRepo.find({
       where: { id: In(productIds) },
     });
-
     if (products.length !== productIds.length) {
       throw new NotFoundException('One or more products not found');
     }
 
-    const totalPrice = products.reduce((sum, p) => sum + Number(p.price), 0);
-
     const order = this.orderRepo.create({
       customer,
       products,
-      totalPrice,
     });
 
     return this.orderRepo.save(order);
   }
 
-  // ------------------------------------------
-  // UPDATE ORDER (optional: products neu setzen)
-  // ------------------------------------------
+  // =====================================================
+  // ===================== UPDATE ========================
+  // =====================================================
   async update(id: number, data: UpdateOrderDto) {
-    const order = await this.findOne(id);
+    const order = await this.orderRepo.findOne({
+      where: { id },
+      relations: ['products', 'customer'],
+    });
+
+    if (!order) throw new NotFoundException('Order not found');
 
     if (data.customerId) {
       const customer = await this.customerRepo.findOne({
@@ -94,16 +121,18 @@ export class OrdersService {
       }
 
       order.products = products;
-
-      // totalPrice neu berechnen
-      order.totalPrice = products.reduce((sum, p) => sum + Number(p.price), 0);
     }
 
     return this.orderRepo.save(order);
   }
 
+  // =====================================================
+  // ===================== DELETE ========================
+  // =====================================================
   async remove(id: number) {
-    const order = await this.findOne(id);
+    const order = await this.orderRepo.findOne({ where: { id } });
+    if (!order) throw new NotFoundException('Order not found');
+
     return this.orderRepo.remove(order);
   }
 }

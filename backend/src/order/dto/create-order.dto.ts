@@ -1,4 +1,4 @@
-import { IsArray, ArrayNotEmpty, IsInt, IsNumber, Min } from 'class-validator';
+import { IsArray, ArrayNotEmpty, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateOrderDto {
@@ -7,11 +7,6 @@ export class CreateOrderDto {
   @IsInt({ each: true })
   @Type(() => Number)
   productIds: number[];
-
-  @Type(() => Number)
-  @IsNumber({}, { message: 'totalPrice must be a number' })
-  @Min(0)
-  totalPrice: number;
 
   @IsInt()
   @Type(() => Number)
