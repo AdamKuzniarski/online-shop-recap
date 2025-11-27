@@ -4,11 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NavItemConfig } from "../types/navItemConfig";
 import {  useState } from "react";
-import { Home, Headphones, Settings, User, KeyRound } from "lucide-react";
+import { Home, Headphones, Settings, User, KeyRound, Handshake } from "lucide-react";
 
 const mainNavBase: NavItemConfig[] = [
   { href: "/", label: "Home", icon: Home },
   { href: "/customers", label: "Customers", icon: User },
+  { href: "/orders", label: "Orders", icon: Handshake },
 ];
 
 const secondaryNav: NavItemConfig[] = [
