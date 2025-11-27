@@ -3,7 +3,7 @@ import { CustomerResponseDto } from '../../customer/dto/customer-response.dto';
 
 export class OrderResponseDto {
   id: number;
-  products: ProductResponseDto[]; // je nach Bedarf: nur IDs oder volle Produkte
-  totalPrice: number;
+  products: ProductResponseDto[];
+  totalPrice: number;       // dynamisch berechnet
   customer: CustomerResponseDto;
 }

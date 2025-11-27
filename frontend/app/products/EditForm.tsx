@@ -69,6 +69,7 @@ export default function EditUserForm({ onSubmit, initialData }: FormProps) {
           type="number"
           defaultValue={initialData?.price}
           required
+          step="0.01"
           id="price"
           name="price"
           className="w-full rounded-xl border text-black border-slate-200 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"

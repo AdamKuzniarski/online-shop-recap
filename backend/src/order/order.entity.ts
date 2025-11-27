@@ -22,8 +22,6 @@ export class Order {
   })
   products: Product[];
 
-  @Column('decimal', { precision: 10, scale: 2 })
-  totalPrice: number;
 
   @ManyToOne(() => Customer, (customer) => customer.orders, {
     onDelete: 'CASCADE',
