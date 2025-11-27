@@ -23,48 +23,53 @@ export class OrdersService {
   // =====================================================
   // ========== GET ALL ORDERS WITH TOTAL PRICE ==========
   // =====================================================
-  async findAll() {
-    return this.orderRepo
-      .createQueryBuilder('order')
-      .leftJoinAndSelect('order.products', 'product')
-      .leftJoinAndSelect('order.customer', 'customer')
-      .addSelect('SUM(product.price)', 'totalPrice')
-      .groupBy('order.id')
-      .addGroupBy('customer.id')
-      .addGroupBy('product.id')
-      .getRawAndEntities()
-      .then(({ entities, raw }) =>
-        entities.map((entity, i) => ({
-          ...entity,
-          totalPrice: Number(raw[i].totalPrice),
-        })),
-      );
-  }
+async findAll() {
+  const orders = await this.orderRepo
+    .createQueryBuilder('order')
+    .leftJoinAndSelect('order.products', 'product')
+    .leftJoinAndSelect('order.customer', 'customer')
+    .addSelect(subQuery => {
+      return subQuery
+        .select('SUM(p.price)', 'totalPrice')
+        .from('order_products', 'op')
+        .innerJoin('product', 'p', 'p.id = op.product_id')
+        .where('op.order_id = "order".id');
+    }, 'totalPrice')
+    .getRawAndEntities();
+
+  return orders.entities.map((entity, i) => ({
+    ...entity,
+    totalPrice: Number(orders.raw[i].totalPrice),
+  }));
+}
 
   // =====================================================
   // ========== GET ONE ORDER WITH TOTAL PRICE ===========
   // =====================================================
-  async findOne(id: number) {
-    const result = await this.orderRepo
-      .createQueryBuilder('order')
-      .leftJoinAndSelect('order.products', 'product')
-      .leftJoinAndSelect('order.customer', 'customer')
-      .addSelect('SUM(product.price)', 'totalPrice')
-      .where('order.id = :id', { id })
-      .groupBy('order.id')
-      .addGroupBy('customer.id')
-      .addGroupBy('product.id')
-      .getRawAndEntities();
+async findOne(id: number) {
+  const result = await this.orderRepo
+    .createQueryBuilder('order')
+    .leftJoinAndSelect('order.products', 'product')
+    .leftJoinAndSelect('order.customer', 'customer')
+    .addSelect(subQuery => {
+      return subQuery
+        .select('SUM(p.price)', 'totalPrice')
+        .from('order_products', 'op')
+        .innerJoin('product', 'p', 'p.id = op.product_id')
+        .where('op.order_id = "order".id');
+    }, 'totalPrice')
+    .where('order.id = :id', { id })
+    .getRawAndEntities();
 
-    if (!result.entities.length) {
-      throw new NotFoundException('Order not found');
-    }
-
-    return {
-      ...result.entities[0],
-      totalPrice: Number(result.raw[0].totalPrice),
-    };
+  if (!result.entities.length) {
+    throw new NotFoundException('Order not found');
   }
+
+  return {
+    ...result.entities[0],
+    totalPrice: Number(result.raw[0].totalPrice),
+  };
+}
 
   // =====================================================
   // ===================== CREATE ========================

@@ -6,8 +6,7 @@ import { Order } from "../types/order";
 import CardOrder from "./CardOrder";
 
 export default function OrdersPage() {
-
-    const {
+  const {
     data: orders,
     isLoading,
     error,
