@@ -14,7 +14,12 @@ export default function Form({ onSubmit }: FormProps) {
     const formData = new FormData(event.currentTarget);
     const raw = Object.fromEntries(formData);
 
-    const data = raw as unknown as ProductsFormData;
+    const data: ProductsFormData = {
+      name: raw.name as string,
+      description: raw.description as string,
+      price: Number(parseFloat(raw.price as string).toFixed(2)), // <-- wichtig
+    };
+
     onSubmit(data);
   }
 
@@ -61,10 +66,12 @@ export default function Form({ onSubmit }: FormProps) {
           Price
         </label>
         <input
-          type="number"
-          required
+          type="text"
           id="price"
           name="price"
+          inputMode="decimal"
+          pattern="[0-9]+([.,][0-9]{1,2})?"
+          required
           className="w-full text-black rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
         />
       </div>

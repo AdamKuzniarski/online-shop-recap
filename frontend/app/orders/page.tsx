@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import useSWR from "swr";
-import CardOrder from "./CardOrder";
+
 import { Order } from "../types/order";
+import CardOrder from "./CardOrder";
 
 export default function OrdersPage() {
 
@@ -40,6 +41,7 @@ export default function OrdersPage() {
               <CardOrder
                 id={order.id}
                 totalPrice={order.totalPrice}
+                price={order.price}
                 customer={order.customer}
                 products={order.products}
               />

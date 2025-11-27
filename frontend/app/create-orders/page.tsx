@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import AddCustomerForm, {
-  CustomerFormData,
-} from "../customers/AddCustomerForm";
+import AddOrderForm, { OrderFormData } from "../orders/AddOrderForm";
+import useSWR from "swr";
 
 export default function CreateOrder() {
   const router = useRouter();
+
+  const { data: customers } = useSWR("http://localhost:4000/api/customers");
+  const { data: products } = useSWR("http://localhost:4000/api/products");
 
   async function addOrder(data: OrderFormData) {
     await fetch("http://localhost:4000/api/orders", {
@@ -18,6 +20,11 @@ export default function CreateOrder() {
 
     router.push("/orders");
   }
+
+  if (!customers || !products) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <section className="space-y-4">
       <header className="flex items-center justify-between"></header>
@@ -30,7 +37,11 @@ export default function CreateOrder() {
       >
         ← Orders Overview
       </Link>
-      <AddOrderForm onSubmit={addOrder} />
+      <AddOrderForm
+        onSubmit={addOrder}
+        customers={customers}
+        products={products}
+      />
     </section>
   );
 }

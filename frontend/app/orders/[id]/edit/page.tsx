@@ -1,10 +1,10 @@
-import EditCustomerClient from "./EditCustomerClient";
+import EditOrderClient from "./EditOrderClient";
 
 type Props = {
   params: { id: string };
 };
 
-export default async function EditCustomerPage({ params }: Props) {
+export default async function EditOrderPage({ params }: Props) {
   const { id } = await params;
-  return <EditCustomerClient id={id} />;
+  return <EditOrderClient id={id} />;
 }

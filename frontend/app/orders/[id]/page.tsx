@@ -39,9 +39,11 @@ export default async function DetailOrderPage({ params }: Props) {
           {order.products && order.products.length > 0
             ? order.products.map((product: Product) => (
                 <li key={product.id}>
-                  <p>{product.name}</p>
-                  <p>{product.description}</p>
-                  <p>{product.price}</p>
+                  <div className="m-5">
+                    <p>{product.name}</p>
+                    <p>{product.description}</p>
+                    <p>{product.price}</p>
+                  </div>
                 </li>
               ))
             : "Keine Produkte gefunden!"}
